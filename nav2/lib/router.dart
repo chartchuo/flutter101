@@ -108,13 +108,16 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
   Future<void> setNewRoutePath(GameRouterPath path) async {
     if (path.isHome) {
       _gameRouterPath = GameRouterPath.home();
+      notifyListeners();
       return;
     }
     if (path.isDetail && path.id! >= 0 && path.id! < _games.length) {
       _gameRouterPath = GameRouterPath.detail(path.id);
+      notifyListeners();
       return;
     }
 
     _gameRouterPath = GameRouterPath.unknown();
+    notifyListeners();
   }
 }

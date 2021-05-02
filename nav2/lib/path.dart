@@ -10,7 +10,9 @@ class GameRouterPath {
   final RootPath rootPath;
   final int? id;
 
-  GameRouterPath(this.rootPath, [this.id]);
+  GameRouterPath(this.rootPath, [this.id])
+      : assert(rootPath != RootPath.gameDetail || id != null,
+            "When root paht is game detail should provide id");
 }
 
 class GameRouteInformationParser

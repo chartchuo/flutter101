@@ -1,66 +1,13 @@
 import 'package:flutter/material.dart';
 import 'screen.dart';
 import 'state.dart';
-
-class GameRouterPath {
-  final int? id; // id == null -> home page
-  final bool isUnknown;
-
-  GameRouterPath()
-      : id = null,
-        isUnknown = false;
-
-  GameRouterPath.home()
-      : id = null,
-        isUnknown = false;
-
-  GameRouterPath.detail(this.id) : isUnknown = false;
-
-  GameRouterPath.unknown()
-      : id = null,
-        isUnknown = true;
-
-  bool get isHome => id == null;
-  bool get isDetail => id != null;
-}
-
-class GameRouteInformationParser
-    extends RouteInformationParser<GameRouterPath> {
-  @override
-  Future<GameRouterPath> parseRouteInformation(
-      RouteInformation routeInformation) async {
-    var uri = Uri.parse(routeInformation.location ?? '/');
-
-    // handle home
-    if (uri.pathSegments.length == 0) {
-      return GameRouterPath.home();
-    }
-
-    //detail hendle '/game/:id'
-    if (uri.pathSegments.length == 2 && uri.pathSegments[0] == 'game') {
-      var id = int.tryParse(uri.pathSegments[1]);
-      return GameRouterPath.detail(id);
-    }
-
-    return GameRouterPath.unknown();
-  }
-
-  @override
-  RouteInformation? restoreRouteInformation(GameRouterPath path) {
-    if (path.isHome) return RouteInformation(location: '/');
-
-    if (path.isDetail) return RouteInformation(location: '/game/${path.id}');
-
-    if (path.isUnknown) return RouteInformation(location: '/unknown');
-    return null;
-  }
-}
+import 'path.dart';
 
 class GameRouterDelegate extends RouterDelegate<GameRouterPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<GameRouterPath> {
   final GlobalKey<NavigatorState> _navigatorKey;
   final _games = gamesDB;
-  var _gameRouterPath = GameRouterPath.home();
+  var _gameRouterPath = GameRouterPath(RootPath.gameList);
 
   GameRouterDelegate() : _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -77,16 +24,15 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
             child: GamesListScreen(
               games: _games,
               onTapped: (id) {
-                _gameRouterPath = GameRouterPath.detail(id);
-                notifyListeners();
+                setNewRoutePath(GameRouterPath(RootPath.gameDetail, id));
               },
             )),
-        if (_gameRouterPath.isDetail)
+        if (_gameRouterPath.rootPath == RootPath.gameDetail)
           MaterialPage(
             key: ValueKey('Game${_gameRouterPath.id}'),
             child: GameDetailScreen(game: _games[_gameRouterPath.id!]),
           )
-        else if (_gameRouterPath.isUnknown)
+        else if (_gameRouterPath.rootPath == RootPath.unknown)
           MaterialPage(
             key: ValueKey('UnknownPage'),
             child: UnknownScreen(),
@@ -94,8 +40,7 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
       ],
       onPopPage: (route, result) {
         if (!route.didPop(result)) return false;
-        _gameRouterPath = GameRouterPath.home();
-        notifyListeners();
+        setNewRoutePath(GameRouterPath(RootPath.gameList));
         return true;
       },
     );
@@ -106,18 +51,13 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
 
   @override
   Future<void> setNewRoutePath(GameRouterPath path) async {
-    if (path.isHome) {
-      _gameRouterPath = GameRouterPath.home();
-      notifyListeners();
-      return;
-    }
-    if (path.isDetail && path.id! >= 0 && path.id! < _games.length) {
-      _gameRouterPath = GameRouterPath.detail(path.id);
-      notifyListeners();
-      return;
+    _gameRouterPath = path;
+
+    if (path.rootPath == RootPath.gameDetail &&
+        (path.id! < 0 || path.id! >= _games.length)) {
+      _gameRouterPath = GameRouterPath(RootPath.unknown);
     }
 
-    _gameRouterPath = GameRouterPath.unknown();
     notifyListeners();
   }
 }

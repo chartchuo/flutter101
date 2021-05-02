@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'screen.dart';
 import 'state.dart';
 
-enum GameRootPath { home, unknown, detail }
-
 class GameRouterPath {
-  final GameRootPath _gameRootPath;
-  final int? _id;
+  final int? id; // id == null -> home page
+  final bool isUnknown;
+
+  GameRouterPath()
+      : id = null,
+        isUnknown = false;
 
   GameRouterPath.home()
-      : _gameRootPath = GameRootPath.home,
-        _id = null;
+      : id = null,
+        isUnknown = false;
 
-  GameRouterPath.detail(this._id) : _gameRootPath = GameRootPath.detail;
+  GameRouterPath.detail(this.id) : isUnknown = false;
 
   GameRouterPath.unknown()
-      : _gameRootPath = GameRootPath.unknown,
-        _id = null;
+      : id = null,
+        isUnknown = true;
 
-  bool get isHome => _gameRootPath == GameRootPath.home;
-  bool get isDetail => _gameRootPath == GameRootPath.detail;
-  bool get isUnknown => _gameRootPath == GameRootPath.unknown;
-  int? get id => _gameRootPath == GameRootPath.detail ? _id : null;
+  bool get isHome => id == null;
+  bool get isDetail => id != null;
 }
 
 class GameRouteInformationParser

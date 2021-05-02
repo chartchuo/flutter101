@@ -4,6 +4,7 @@ enum RootPath {
   gameList,
   unknown,
   gameDetail,
+  search,
 }
 
 class GameRouterPath {
@@ -24,7 +25,7 @@ class GameRouteInformationParser
 
     // handle home
     if (uri.pathSegments.length == 0) {
-      return GameRouterPath(RootPath.gameList);
+      return GameRouterPath(RootPath.search);
     }
 
     //detail hendle '/game/:id'
@@ -33,13 +34,26 @@ class GameRouteInformationParser
       return GameRouterPath(RootPath.gameDetail, id);
     }
 
+    //detail hendle '/search'
+    if (uri.pathSegments.length == 1 && uri.pathSegments[0] == 'search') {
+      return GameRouterPath(RootPath.search);
+    }
+
+    //detail hendle '/list'
+    if (uri.pathSegments.length == 1 && uri.pathSegments[0] == 'list') {
+      return GameRouterPath(RootPath.gameList);
+    }
+
     return GameRouterPath(RootPath.unknown);
   }
 
   @override
   RouteInformation? restoreRouteInformation(GameRouterPath path) {
     if (path.rootPath == RootPath.gameList)
-      return RouteInformation(location: '/');
+      return RouteInformation(location: '/list');
+
+    if (path.rootPath == RootPath.search)
+      return RouteInformation(location: '/search');
 
     if (path.rootPath == RootPath.gameDetail)
       return RouteInformation(location: '/game/${path.id}');

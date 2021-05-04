@@ -1,35 +1,49 @@
 import 'package:flutter/material.dart';
 import 'screen/screen.dart';
 import 'state.dart';
+import 'model/model.dart';
 import 'path.dart';
 
 class GameRouterDelegate extends RouterDelegate<GameRouterPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<GameRouterPath> {
   final GlobalKey<NavigatorState> _navigatorKey;
-  final _games = gamesDB;
+  // final _games = gamesDB;
+  final db = GamesDB();
   var _gameRouterPath = GameRouterPath(RootPath.search);
 
-  MaterialPage gameListPage() => MaterialPage(
-      key: ValueKey('GamesListPage'),
-      child: GamesListScreen(
-        games: _games,
-        onTapped: (id) =>
-            setNewRoutePath(GameRouterPath(RootPath.gameDetail, id)),
-      ));
-  MaterialPage searchPage() => MaterialPage(
-      key: ValueKey('SearchPage'),
-      child: SearchScreen(
-        onSubmit: (String value) =>
-            setNewRoutePath(GameRouterPath(RootPath.gameList)),
-      ));
-  MaterialPage gameDetailPage() => MaterialPage(
-        key: ValueKey('Game${_gameRouterPath.id}'),
-        child: GameDetailScreen(game: _games[_gameRouterPath.id!]),
-      );
-  MaterialPage unknownPage() => MaterialPage(
-        key: ValueKey('UnknownPage'),
-        child: UnknownScreen(),
-      );
+  MaterialPage gameListPage() {
+    return MaterialPage(
+        key: ValueKey('GamesListPage'),
+        child: GamesListScreen(
+          games: db.data ?? [],
+          onTapped: (id) =>
+              setNewRoutePath(GameRouterPath(RootPath.gameDetail, id)),
+        ));
+  }
+
+  MaterialPage searchPage() {
+    return MaterialPage(
+        key: ValueKey('SearchPage'),
+        child: SearchScreen(onSubmit: (String value) async {
+          await db.search(value);
+          setNewRoutePath(GameRouterPath(RootPath.gameList));
+        }));
+  }
+
+  MaterialPage<String> gameDetailPage() {
+    return MaterialPage<String>(
+      key: ValueKey('Game${_gameRouterPath.id}'),
+      maintainState: false,
+      child: GameDetailScreen(game: db.data?[_gameRouterPath.id!] ?? Game()),
+    );
+  }
+
+  MaterialPage unknownPage() {
+    return MaterialPage(
+      key: ValueKey('UnknownPage'),
+      child: UnknownScreen(),
+    );
+  }
 
   GameRouterDelegate() : _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -58,15 +72,8 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
       key: _navigatorKey,
       pages: pageStack,
       onPopPage: (route, result) {
-        if (!route.didPop(result)) return false;
-
-        if (_gameRouterPath.rootPath == RootPath.gameDetail)
-          setNewRoutePath(GameRouterPath(RootPath.gameList));
-        else if (_gameRouterPath.rootPath == RootPath.gameList)
-          setNewRoutePath(GameRouterPath(RootPath.search));
-        else
-          setNewRoutePath(GameRouterPath(RootPath.search));
-        return true;
+        print('Pop value $result');
+        return route.didPop(result);
       },
     );
   }
@@ -79,7 +86,7 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
     _gameRouterPath = path;
 
     if (path.rootPath == RootPath.gameDetail &&
-        (path.id! < 0 || path.id! >= _games.length)) {
+        (path.id! < 0 || path.id! >= (db.data?.length ?? 0))) {
       _gameRouterPath = GameRouterPath(RootPath.unknown);
     }
 

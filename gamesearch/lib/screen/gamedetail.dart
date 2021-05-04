@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model.dart';
+import '../model/model.dart';
 
 class GameDetailScreen extends StatelessWidget {
   final Game game;
@@ -14,7 +14,14 @@ class GameDetailScreen extends StatelessWidget {
       body: Column(
         children: [
           Text(game.title),
-          Text(game.developer),
+          Text(game.year),
+          Image.network(game.backgroundImage ?? ''),
+          OutlinedButton(
+            child: Text('Pop'),
+            onPressed: () {
+              Navigator.pop(context, 'AAAAA');
+            },
+          ),
         ],
       ),
     );

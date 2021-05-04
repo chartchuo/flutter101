@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model.dart';
+import '../model/model.dart';
 
 class GamesListScreen extends StatelessWidget {
   final List<Game> games;
@@ -21,7 +21,7 @@ class GamesListScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(games[index].title),
-            subtitle: Text(games[index].developer),
+            subtitle: Text(games[index].year),
             onTap: () {
               onTapped(index);
             },

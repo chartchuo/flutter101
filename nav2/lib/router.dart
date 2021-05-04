@@ -3,13 +3,13 @@ import 'screen.dart';
 import 'state.dart';
 import 'path.dart';
 
-class GameRouterDelegate extends RouterDelegate<GameRouterPath>
+class GameRouter extends RouterDelegate<GameRouterPath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<GameRouterPath> {
   final GlobalKey<NavigatorState> _navigatorKey;
   final _games = gamesDB;
   var _gameRouterPath = GameRouterPath(RootPath.gameList);
 
-  GameRouterDelegate() : _navigatorKey = GlobalKey<NavigatorState>();
+  GameRouter() : _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   GameRouterPath get currentConfiguration => _gameRouterPath;
@@ -39,9 +39,7 @@ class GameRouterDelegate extends RouterDelegate<GameRouterPath>
           )
       ],
       onPopPage: (route, result) {
-        if (!route.didPop(result)) return false;
-        setNewRoutePath(GameRouterPath(RootPath.gameList));
-        return true;
+        return route.didPop(result);
       },
     );
   }

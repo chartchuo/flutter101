@@ -5,6 +5,6 @@ import 'path.dart';
 void main() {
   runApp(MaterialApp.router(
     routeInformationParser: GameRouteInformationParser(),
-    routerDelegate: GameRouterDelegate(),
+    routerDelegate: GameRouter(),
   ));
 }

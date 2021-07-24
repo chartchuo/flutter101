@@ -46,14 +46,12 @@ class SlideBoard {
     }
   }
 
-  shuffle([int time = 1000]) {
-    for (var i = 0; i < time; i++) {
+  shuffle([int move = 1000]) {
+    for (var i = 0; i < move; i++) {
       tap(tiles[0].row, Random().nextInt(4));
       tap(Random().nextInt(4), tiles[0].col);
     }
   }
-
-  List<BoardTile> toList() => tiles;
 
   bool solved() {
     if (tiles[0].row != 3) return false;

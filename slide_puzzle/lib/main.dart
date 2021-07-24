@@ -50,31 +50,36 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Spacer(),
-            Container(
-              color: Colors.grey,
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Stack(
-                  children: [
-                    ...board.toList().map((e) => Tile(
-                          e.row,
-                          e.col,
-                          e.number,
-                          onTap: () {
-                            if (solved) return;
-                            setState(() {
-                              if (easyMode)
-                                board.move(e.row, e.col);
-                              else
-                                board.tap(e.row, e.col);
-                              if (board.solved()) {
-                                _showMyDialog();
-                                solved = true;
-                              }
-                            });
-                          },
-                        ))
-                  ],
+            LimitedBox(
+              maxWidth: 400,
+              maxHeight: 400,
+              child: Container(
+                padding: EdgeInsets.all(2),
+                color: Colors.grey,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Stack(
+                    children: [
+                      ...board.tiles.map((e) => Tile(
+                            e.row,
+                            e.col,
+                            e.number,
+                            onTap: () {
+                              if (solved) return;
+                              setState(() {
+                                if (easyMode)
+                                  board.move(e.row, e.col);
+                                else
+                                  board.tap(e.row, e.col);
+                                if (board.solved()) {
+                                  _showMyDialog();
+                                  solved = true;
+                                }
+                              });
+                            },
+                          ))
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -118,6 +123,7 @@ class Tile extends StatelessWidget {
       return Container();
     }
     return AnimatedAlign(
+      key: Key('tile' + number.toRadixString(16)),
       alignment: FractionalOffset(col / 3, row / 3),
       duration: Duration(milliseconds: 200),
       child: FractionallySizedBox(
@@ -126,17 +132,8 @@ class Tile extends StatelessWidget {
         child: GestureDetector(
           onTap: onTap,
           child: SizedBox.expand(
-            child: Container(
+            child: Card(
               margin: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              // color: Colors.white,
               child: Center(
                 child: Text(
                   '$number',

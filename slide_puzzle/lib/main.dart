@@ -2,20 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slide_puzzle/model.dart';
 
 void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
+  runApp(MaterialApp(home: MyHomePage()));
 }
 
 class MyHomePage extends StatefulWidget {
@@ -151,7 +138,10 @@ class Tile extends StatelessWidget {
               ),
               // color: Colors.white,
               child: Center(
-                child: Text('$number'),
+                child: Text(
+                  '$number',
+                  style: TextStyle(fontSize: 24),
+                ),
               ),
             ),
           ),

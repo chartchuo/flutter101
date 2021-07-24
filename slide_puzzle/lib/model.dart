@@ -46,15 +46,6 @@ class SlideBoard {
     }
   }
 
-  int data(row, col) {
-    for (var i = 0; i < 16; i++) {
-      if (tiles[i].row == row && tiles[i].col == col) {
-        return tiles[i].number;
-      }
-    }
-    throw ('data not found');
-  }
-
   shuffle([int time = 1000]) {
     for (var i = 0; i < time; i++) {
       tap(tiles[0].row, Random().nextInt(4));

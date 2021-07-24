@@ -1,79 +1,77 @@
 import 'dart:math';
 
 class BoardTile {
-  final int row, col;
-  final int number;
+  int row, col;
+  int number;
 
   BoardTile(this.row, this.col, this.number);
 }
 
 class SlideBoard {
-  int blankRow = 3;
-  int blankCol = 3;
-  var data = List.generate(4, (i) => List.filled(4, 0, growable: false),
-      growable: false);
+  late List<BoardTile> tiles;
 
   SlideBoard() {
-    //fill data into array 0=>empty
-    var number = 1;
-    for (var row = 0; row < 4; row++) {
-      for (var col = 0; col < 4; col++) {
-        data[row][col] = number;
-        number += 1;
+    tiles = List.generate(16, (i) {
+      if (i == 0) return BoardTile(3, 3, 0); //blank tile
+      return BoardTile((i - 1) % 4, (i - 1) ~/ 4, i);
+    });
+  }
+
+  //move swap with blank
+  void move(int row, col) {
+    for (var i = 1; i < 16; i++) {
+      if (tiles[i].row == row && tiles[i].col == col) {
+        tiles[i].row = tiles[0].row;
+        tiles[i].col = tiles[0].col;
+        tiles[0].row = row;
+        tiles[0].col = col;
+        return;
       }
     }
-    data[3][3] = 0;
   }
 
   tap(int row, int col) {
-    if (row == blankRow) {
-      if (blankCol < col)
-        for (var i = blankCol; i < col; i++) data[row][i] = data[row][i + 1];
+    if (row == tiles[0].row) {
+      if (tiles[0].col < col)
+        for (var i = tiles[0].col + 1; i <= col; i++) move(row, i);
 
-      if (blankCol > col)
-        for (var i = blankCol; i > col; i--) data[row][i] = data[row][i - 1];
+      if (tiles[0].col > col)
+        for (var i = tiles[0].col - 1; i >= col; i--) move(row, i);
+    } else if (col == tiles[0].col) {
+      if (tiles[0].row < row)
+        for (var i = tiles[0].row + 1; i <= row; i++) move(i, col);
 
-      blankCol = col;
-    } else if (col == blankCol) {
-      if (blankRow < row)
-        for (var i = blankRow; i < row; i++) data[i][col] = data[i + 1][col];
-
-      if (blankRow > row)
-        for (var i = blankRow; i > row; i--) data[i][col] = data[i - 1][col];
-
-      blankRow = row;
+      if (tiles[0].row > row)
+        for (var i = tiles[0].row - 1; i >= row; i--) move(i, col);
     }
-    data[blankRow][blankCol] = 0;
   }
 
-  @override
-  String toString() {
-    var str = '';
-    for (var row = 0; row < 4; row++)
-      for (var col = 0; col < 4; col++)
-        str = str + data[row][col].toRadixString(16);
-
-    return str;
+  int data(row, col) {
+    for (var i = 0; i < 16; i++) {
+      if (tiles[i].row == row && tiles[i].col == col) {
+        return tiles[i].number;
+      }
+    }
+    throw ('data not found');
   }
 
   shuffle([int time = 1000]) {
     for (var i = 0; i < time; i++) {
-      tap(blankRow, Random().nextInt(4));
-      tap(Random().nextInt(4), blankCol);
+      tap(tiles[0].row, Random().nextInt(4));
+      tap(Random().nextInt(4), tiles[0].col);
     }
   }
 
-  List<BoardTile> toList() {
-    List<BoardTile> e = [];
-    for (var row = 0; row < 4; row++)
-      for (var col = 0; col < 4; col++)
-        e.add(BoardTile(row, col, data[row][col]));
-
-    e.sort((a, b) => a.number.compareTo(b.number));
-    return e;
-  }
+  List<BoardTile> toList() => tiles;
 
   bool solved() {
-    return toString() == '123456789abcdef0';
+    if (tiles[0].row != 3) return false;
+    if (tiles[0].col != 3) return false;
+    for (var i = 1; i < 16; i++) {
+      if (tiles[i].row != (i - 1) ~/ 4) return false;
+      if (tiles[i].col != (i - 1) % 4) return false;
+    }
+
+    return true;
   }
 }

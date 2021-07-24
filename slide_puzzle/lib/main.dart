@@ -26,6 +26,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var board = SlideBoard()..shuffle();
   bool solved = false;
+  bool easyMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                ToggleButtons(
+                  children: [Text('Easy')],
+                  isSelected: [easyMode],
+                  onPressed: (_) {
+                    setState(() {
+                      easyMode = !easyMode;
+                    });
+                  },
+                ),
                 TextButton.icon(
                   icon: Icon(Icons.restart_alt),
                   label: Text('Restart'),
@@ -66,7 +76,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () {
                             if (solved) return;
                             setState(() {
-                              board.tap(e.row, e.col);
+                              if (easyMode)
+                                board.move(e.row, e.col);
+                              else
+                                board.tap(e.row, e.col);
                               if (board.solved()) {
                                 _showMyDialog();
                                 solved = true;

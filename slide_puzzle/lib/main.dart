@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 TextButton.icon(
                   icon: Icon(Icons.restart_alt),
-                  label: Text('Restart'),
+                  label: Text('Shuffle'),
                   onPressed: () {
                     setState(() {
                       board = SlideBoard()..shuffle();
@@ -64,13 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             e.row,
                             e.col,
                             e.number,
+                            key: ValueKey(e.number),
                             onTap: () {
                               if (solved) return;
                               setState(() {
                                 if (easyMode)
                                   board.move(e.row, e.col);
                                 else
-                                  board.tap(e.row, e.col);
+                                  board.slide(e.row, e.col);
                                 if (board.solved()) {
                                   _showMyDialog();
                                   solved = true;
@@ -115,7 +116,8 @@ class Tile extends StatelessWidget {
   final int row, col;
   final int number;
   final GestureTapCallback? onTap;
-  const Tile(this.row, this.col, this.number, {this.onTap});
+  const Tile(this.row, this.col, this.number, {this.onTap, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +125,6 @@ class Tile extends StatelessWidget {
       return Container();
     }
     return AnimatedAlign(
-      key: Key('tile' + number.toRadixString(16)),
       alignment: FractionalOffset(col / 3, row / 3),
       duration: Duration(milliseconds: 200),
       child: FractionallySizedBox(

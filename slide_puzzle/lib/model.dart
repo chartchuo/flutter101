@@ -30,7 +30,7 @@ class SlideBoard {
     }
   }
 
-  tap(int row, int col) {
+  slide(int row, int col) {
     if (row == tiles[0].row) {
       if (tiles[0].col < col)
         for (var i = tiles[0].col + 1; i <= col; i++) move(row, i);
@@ -48,8 +48,8 @@ class SlideBoard {
 
   shuffle([int move = 1000]) {
     for (var i = 0; i < move; i++) {
-      tap(tiles[0].row, Random().nextInt(4));
-      tap(Random().nextInt(4), tiles[0].col);
+      slide(tiles[0].row, Random().nextInt(4));
+      slide(Random().nextInt(4), tiles[0].col);
     }
   }
 

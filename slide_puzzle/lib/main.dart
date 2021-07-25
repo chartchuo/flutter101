@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:slide_puzzle/model.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyHomePage()));
+  runApp(MaterialApp(home: HomePage()));
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   var board = SlideBoard()..shuffle();
-  bool solved = false;
   bool easyMode = false;
 
   @override
@@ -43,7 +42,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     setState(() {
                       board = SlideBoard()..shuffle();
-                      solved = false;
                     });
                   },
                 ),
@@ -66,17 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             e.number,
                             key: ValueKey(e.number),
                             onTap: () {
-                              if (solved) return;
+                              if (board.isSolved()) return;
                               setState(() {
                                 if (easyMode)
                                   board.move(e.row, e.col);
                                 else
                                   board.slide(e.row, e.col);
-                                if (board.solved()) {
-                                  _showMyDialog();
-                                  solved = true;
-                                }
                               });
+                              if (board.isSolved()) {
+                                _showMyDialog();
+                              }
                             },
                           ))
                     ],

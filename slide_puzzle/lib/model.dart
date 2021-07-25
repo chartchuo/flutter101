@@ -53,7 +53,7 @@ class SlideBoard {
     }
   }
 
-  bool solved() {
+  bool isSolved() {
     if (tiles[0].row != 3) return false;
     if (tiles[0].col != 3) return false;
     for (var i = 1; i < 16; i++) {

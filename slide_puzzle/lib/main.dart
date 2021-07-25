@@ -47,8 +47,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             if (board.isSolved()) return;
                             setState(() {
-                              // board.slide(t.row, t.col);
-                              board.move(t.row, t.col);
+                              board.slide(t.row, t.col);
                             });
                             if (board.isSolved()) _showMyDialog();
                           },

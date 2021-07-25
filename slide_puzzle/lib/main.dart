@@ -2,88 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:slide_puzzle/model.dart';
 
 void main() {
+  var board = SlideBoard();
+  print(board.isSolved());
   runApp(MaterialApp(home: HomePage()));
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   var board = SlideBoard()..shuffle();
-  bool easyMode = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Slide Puzzle'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ToggleButtons(
-                  children: [Text('Easy')],
-                  isSelected: [easyMode],
-                  onPressed: (_) {
-                    setState(() {
-                      easyMode = !easyMode;
-                    });
-                  },
-                ),
-                TextButton.icon(
-                  icon: Icon(Icons.restart_alt),
-                  label: Text('Shuffle'),
+      appBar: AppBar(title: Text('Slide Puzzle'), centerTitle: true),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
                   onPressed: () {
                     setState(() {
                       board = SlideBoard()..shuffle();
                     });
                   },
-                ),
-              ],
-            ),
-            Spacer(),
-            LimitedBox(
-              maxWidth: 400,
-              maxHeight: 400,
-              child: Container(
-                padding: EdgeInsets.all(2),
-                color: Colors.grey,
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Stack(
-                    children: [
-                      ...board.tiles.map((e) => Tile(
-                            e.row,
-                            e.col,
-                            e.number,
-                            key: ValueKey(e.number),
-                            onTap: () {
-                              if (board.isSolved()) return;
-                              setState(() {
-                                if (easyMode)
-                                  board.swap(e.row, e.col);
-                                else
-                                  board.slide(e.row, e.col);
-                              });
-                              if (board.isSolved()) {
-                                _showMyDialog();
-                              }
-                            },
-                          ))
-                    ],
-                  ),
-                ),
+                  child: Text('Shuffle'))
+            ],
+          ),
+          Spacer(),
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              color: Colors.grey,
+              child: Stack(
+                children: board.tiles
+                    .map((t) => Tile(
+                          t.row,
+                          t.col,
+                          t.number,
+                          onTap: () {
+                            if (board.isSolved()) return;
+                            setState(() {
+                              board.slide(t.row, t.col);
+                            });
+                            if (board.isSolved()) _showMyDialog();
+                          },
+                        ))
+                    .toList(),
               ),
             ),
-            Spacer(),
-          ],
-        ),
+          ),
+          Spacer(),
+        ],
       ),
     );
   }
@@ -110,35 +86,29 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Tile extends StatelessWidget {
-  final int row, col;
-  final int number;
-  final GestureTapCallback? onTap;
+  final int row, col, number;
+  final void Function()? onTap;
   const Tile(this.row, this.col, this.number, {this.onTap, Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (number == 0) {
-      return Container();
-    }
+    if (number == 0) return Container();
     return AnimatedAlign(
-      alignment: FractionalOffset(col / 3, row / 3),
+      alignment: FractionalOffset(col * 1 / 3, row * 1 / 3),
       duration: Duration(milliseconds: 200),
-      child: FractionallySizedBox(
-        widthFactor: .25,
-        heightFactor: .25,
-        child: GestureDetector(
-          onTap: onTap,
-          child: SizedBox.expand(
-            child: Card(
-              margin: EdgeInsets.all(2),
-              child: Center(
+      child: GestureDetector(
+        onTap: onTap,
+        child: FractionallySizedBox(
+          heightFactor: 1 / 4,
+          widthFactor: 1 / 4,
+          child: Card(
+            color: Colors.white,
+            child: Center(
                 child: Text(
-                  '$number',
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-            ),
+              number.toString(),
+              style: TextStyle(fontSize: 24),
+            )),
           ),
         ),
       ),

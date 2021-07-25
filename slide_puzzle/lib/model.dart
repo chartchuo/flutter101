@@ -18,7 +18,7 @@ class SlideBoard {
   }
 
   //move swap with blank
-  void move(int row, col) {
+  void swap(int row, col) {
     for (var i = 1; i < 16; i++) {
       if (tiles[i].row == row && tiles[i].col == col) {
         tiles[i].row = tiles[0].row;
@@ -33,16 +33,16 @@ class SlideBoard {
   slide(int row, int col) {
     if (row == tiles[0].row) {
       if (tiles[0].col < col)
-        for (var i = tiles[0].col + 1; i <= col; i++) move(row, i);
+        for (var i = tiles[0].col + 1; i <= col; i++) swap(row, i);
 
       if (tiles[0].col > col)
-        for (var i = tiles[0].col - 1; i >= col; i--) move(row, i);
+        for (var i = tiles[0].col - 1; i >= col; i--) swap(row, i);
     } else if (col == tiles[0].col) {
       if (tiles[0].row < row)
-        for (var i = tiles[0].row + 1; i <= row; i++) move(i, col);
+        for (var i = tiles[0].row + 1; i <= row; i++) swap(i, col);
 
       if (tiles[0].row > row)
-        for (var i = tiles[0].row - 1; i >= row; i--) move(i, col);
+        for (var i = tiles[0].row - 1; i >= row; i--) swap(i, col);
     }
   }
 

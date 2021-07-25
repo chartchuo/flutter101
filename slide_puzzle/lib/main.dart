@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                               if (board.isSolved()) return;
                               setState(() {
                                 if (easyMode)
-                                  board.move(e.row, e.col);
+                                  board.swap(e.row, e.col);
                                 else
                                   board.slide(e.row, e.col);
                               });

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:slide_puzzle/model.dart';
 
 void main() {
-  var board = SlideBoard();
-  print(board.isSolved());
   runApp(MaterialApp(home: HomePage()));
 }
 
@@ -49,7 +47,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             if (board.isSolved()) return;
                             setState(() {
-                              board.slide(t.row, t.col);
+                              // board.slide(t.row, t.col);
+                              board.move(t.row, t.col);
                             });
                             if (board.isSolved()) _showMyDialog();
                           },

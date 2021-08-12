@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:dual_screen/dual_screen.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -14,30 +14,34 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
         future: DualScreenInfo.hasHingeAngleSensor,
-        builder: (context, sensorSnapshot) {
-          if (sensorSnapshot.hasData && sensorSnapshot.data != true)
+        builder: (context, hasSensorSnapshot) {
+          if (hasSensorSnapshot.hasData && hasSensorSnapshot.data != true) {
             return MainScreen();
+          }
+
           return StreamBuilder<double>(
               stream: DualScreenInfo.hingeAngleEvents,
-              builder: (context, hingeSnapshot) {
-                print(hingeSnapshot.data);
-                if (hingeSnapshot.hasData &&
-                    (hingeSnapshot.data! > 150 || hingeSnapshot.data! <= 30))
+              builder: (context, hingeAngleSnapshot) {
+                if (hingeAngleSnapshot.hasData &&
+                    (hingeAngleSnapshot.data! > 150 ||
+                        hingeAngleSnapshot.data! <= 30)) {
                   return MainScreen();
+                }
                 return OrientationBuilder(builder: (context, orientation) {
-                  return orientation == Orientation.landscape
-                      ? Column(
-                          children: [
-                            Expanded(child: MainScreen()),
-                            Expanded(child: SubScreen()),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Expanded(child: SubScreen()),
-                            Expanded(child: MainScreen()),
-                          ],
-                        );
+                  if (orientation == Orientation.landscape) {
+                    return Column(
+                      children: [
+                        Expanded(child: MainScreen()),
+                        Expanded(child: SubScreen()),
+                      ],
+                    );
+                  }
+                  return Row(
+                    children: [
+                      Expanded(child: SubScreen()),
+                      Expanded(child: MainScreen()),
+                    ],
+                  );
                 });
               });
         });

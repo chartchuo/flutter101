@@ -53,9 +53,10 @@ class _HomeState extends State<Home> {
                     setState(() {
                       if (stopwatch.isRunning) {
                         stopwatch.stop();
-                        display = stopwatch.elapsed.inSeconds.toString();
-                        stopwatch.reset();
+                        // display = stopwatch.elapsed.inSeconds.toString();
+                        // stopwatch.reset();
                       } else {
+                        stopwatch.reset();
                         stopwatch.start();
                         if (timer?.isActive == true) {
                           timer?.cancel();

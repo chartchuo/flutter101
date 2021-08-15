@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'model.dart';
 
-class TodoCubit extends Cubit<Todo> {
+class TodoCubit extends HydratedCubit<Todo> {
   TodoCubit(Todo initialState) : super(initialState);
 
   void add(Task t) {
@@ -13,4 +13,10 @@ class TodoCubit extends Cubit<Todo> {
     state.tasks.remove(t);
     emit(Todo.from(state));
   }
+
+  @override
+  Todo? fromJson(Map<String, dynamic> json) => Todo.fromJson(json);
+
+  @override
+  Map<String, dynamic>? toJson(Todo state) => state.toJson();
 }

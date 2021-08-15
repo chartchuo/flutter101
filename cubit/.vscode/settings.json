@@ -1,0 +1,4 @@
+{
+    "jsonToDart.copyWith": true,
+    "jsonToDart.equality": "Dart"
+}

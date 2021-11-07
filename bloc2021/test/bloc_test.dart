@@ -27,6 +27,7 @@ void main() {
     },
     verify: (bloc) {
       if (bloc.state.tasks.length != 2) throw ('Add error');
+      if (bloc.state.tasks[1].name != 'ccc') throw ('Add error');
     },
   );
   blocTest<TodoBloc, Todo>(

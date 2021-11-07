@@ -47,7 +47,7 @@ void main() {
       bloc.add(TodoComplete(1));
     },
     verify: (bloc) {
-      if (bloc.state.tasks[1].complete == false) {
+      if (bloc.state.tasks[1].complete != true) {
         throw ('complete not true');
       }
     },

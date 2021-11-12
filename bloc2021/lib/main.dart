@@ -8,20 +8,24 @@ import 'model.dart';
 void main() {
   runApp(BlocProvider<TodoBloc>(
     create: (BuildContext context) => TodoBloc(),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +39,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => BlocProvider.of<TodoBloc>(context).add(TodoAdd('New')),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

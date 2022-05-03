@@ -1,10 +1,11 @@
 import 'package:cocktail/cocktail_db/cocktail_db.dart';
+import 'package:cocktail/page/search_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 void main(List<String> args) {
-  runApp(const MaterialApp(home: MyHome()));
+  runApp(const MaterialApp(home: SearchPage()));
 }
 
 class MyHome extends StatefulWidget {

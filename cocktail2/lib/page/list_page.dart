@@ -1,4 +1,5 @@
 import 'package:cocktail/cocktail_db/cocktail_db.dart';
+import 'package:cocktail/page/detail_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -53,7 +54,19 @@ class _ListPageState extends State<ListPage> {
       appBar: AppBar(),
       body: ListView(
         children: cocktailDb.drinks
-                ?.map((e) => ListTile(title: Text(e.strDrink ?? 'No name')))
+                ?.map((e) => ListTile(
+                      leading: e.strDrinkThumb != null
+                          ? Image.network(e.strDrinkThumb!)
+                          : null,
+                      title: Text(e.strDrink ?? 'No name'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPage(e),
+                            ));
+                      },
+                    ))
                 .toList() ??
             [],
       ),

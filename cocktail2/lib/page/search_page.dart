@@ -1,5 +1,6 @@
-import 'package:cocktail/page/list_page.dart';
+import 'package:cocktail/bloc/cocktail_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -20,8 +21,9 @@ class _SearchPageState extends State<SearchPage> {
           ElevatedButton(
             child: const Text('Search'),
             onPressed: () {
-              Navigator.pushNamed(context, '/list',
-                  arguments: ListPageArgs(textCtrl.text));
+              BlocProvider.of<CocktailBloc>(context)
+                  .add(SearchEvent(textCtrl.text));
+              Navigator.pushNamed(context, '/list');
             },
           )
         ],

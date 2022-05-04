@@ -1,9 +1,13 @@
 import 'package:cocktail/cocktail_db/drink.dart';
 import 'package:flutter/material.dart';
 
-class DetailPage extends StatefulWidget {
+class DetailPageArgs {
   final Drink drink;
-  const DetailPage(this.drink, {Key? key}) : super(key: key);
+  DetailPageArgs(this.drink);
+}
+
+class DetailPage extends StatefulWidget {
+  const DetailPage({Key? key}) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -12,13 +16,15 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as DetailPageArgs;
+    final drink = args.drink;
     return Scaffold(
       appBar: AppBar(),
       body: ListView(
         children: [
-          Text(widget.drink.strDrink ?? 'No name'),
+          Text(drink.strDrink ?? 'No name'),
           Image.network(
-            widget.drink.strDrinkThumb ??
+            drink.strDrinkThumb ??
                 'https://www.thecocktaildb.com/images/logo.png',
           ),
         ],

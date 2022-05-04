@@ -20,11 +20,8 @@ class _SearchPageState extends State<SearchPage> {
           ElevatedButton(
             child: const Text('Search'),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ListPage(textCtrl.text),
-                  ));
+              Navigator.pushNamed(context, '/list',
+                  arguments: ListPageArgs(textCtrl.text));
             },
           )
         ],

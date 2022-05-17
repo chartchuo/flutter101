@@ -19,5 +19,10 @@ class CocktailBloc extends Bloc<CocktailEvent, CocktailState> {
         return;
       }
     });
+
+    on<FilterEvent>(((event, emit) {
+      var drinks = repository.filter(event.filterText);
+      emit(CocktailFinishState(drinks));
+    }));
   }
 }

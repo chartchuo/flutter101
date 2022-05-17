@@ -1,4 +1,5 @@
 import 'package:cocktail/bloc/cocktail_bloc.dart';
+import 'package:cocktail/cocktail_db/drink.dart';
 import 'package:cocktail/page/detail_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _ListPageState extends State<ListPage> {
           }
           if (state is CocktailFinishState) {
             return Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(actions: [DorpDownFilter(drinks: state.drinks)]),
               body: ListView(
                 children: state.drinks
                     .map((e) => ListTile(
@@ -83,4 +84,38 @@ Future<void> _showMyDialog(BuildContext context, String message) async {
       );
     },
   );
+}
+
+class DorpDownFilter extends StatefulWidget {
+  final List<Drink> drinks;
+  const DorpDownFilter({Key? key, required this.drinks}) : super(key: key);
+
+  @override
+  State<DorpDownFilter> createState() => _DorpDownFilterState();
+}
+
+class _DorpDownFilterState extends State<DorpDownFilter> {
+  late List<String?> categorys = [null];
+  String? selectedFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    categorys.addAll(widget.drinks.map((e) => e.strCategory).toSet().toList());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String?>(
+        value: selectedFilter,
+        items: categorys
+            .map((e) => DropdownMenuItem(value: e, child: Text(e ?? 'All')))
+            .toList(),
+        onChanged: (selected) {
+          BlocProvider.of<CocktailBloc>(context).add(FilterEvent(selected));
+          setState(() {
+            selectedFilter = selected;
+          });
+        });
+  }
 }

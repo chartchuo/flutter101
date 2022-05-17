@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:cocktail/bloc/cocktail_repository.dart';
 import 'package:cocktail/cocktail_db/drink.dart';
+import 'package:cocktail/repository/cocktail_repository.dart';
 import 'package:flutter/foundation.dart';
 
 part 'cocktail_event.dart';

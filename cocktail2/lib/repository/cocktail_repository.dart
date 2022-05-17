@@ -1,8 +1,8 @@
-import 'package:cocktail/bloc/the_cocktail_db_provider.dart';
 import 'package:cocktail/cocktail_db/drink.dart';
+import 'package:cocktail/repository/provider.dart';
 
 class CocktailRepository {
-  final TheCocktailDbProvider provider;
+  final Provider provider;
   List<Drink> rawData = [];
 
   CocktailRepository(this.provider);

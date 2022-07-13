@@ -19,6 +19,7 @@ class AddPage extends StatelessWidget {
           ElevatedButton(
               onPressed: () {
                 context.read<Todo>().add(ctrl.text);
+                // context.read<Todo>().tasks.add(ctrl.text);
                 Navigator.pop(context);
               },
               child: const Text("Add")),

@@ -19,3 +19,6 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+bloc2021/windows/flutter/generated_plugins.cmake
+bloc2021/windows/flutter/generated_plugin_registrant.cc
+bloc2021/windows/flutter/generated_plugin_registrant.h

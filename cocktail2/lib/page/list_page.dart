@@ -22,6 +22,7 @@ class _ListPageState extends State<ListPage> {
             print(state.message);
           }
           await _showMyDialog(context, state.message);
+          if (!mounted) return;
           Navigator.pop(context);
         }
       },

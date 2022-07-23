@@ -1,6 +1,8 @@
 import 'package:cocktail/cocktail_db/drink.dart';
 import 'package:flutter/material.dart';
 
+import 'cache_image.dart';
+
 class DetailPageArgs {
   final Drink drink;
   DetailPageArgs(this.drink);
@@ -23,7 +25,7 @@ class _DetailPageState extends State<DetailPage> {
       body: ListView(
         children: [
           Text(drink.strDrink ?? 'No name'),
-          Image.network(
+          CacheImage(
             drink.strDrinkThumb ??
                 'https://www.thecocktaildb.com/images/logo.png',
           ),

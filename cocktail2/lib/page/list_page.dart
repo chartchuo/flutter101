@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'cache_image.dart';
+
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
 
@@ -40,7 +42,7 @@ class _ListPageState extends State<ListPage> {
                 children: state.drinks
                     .map((e) => ListTile(
                           leading: e.strDrinkThumb != null
-                              ? Image.network(e.strDrinkThumb!)
+                              ? CacheImage('${e.strDrinkThumb!}/preview')
                               : null,
                           title: Text(e.strDrink ?? 'No name'),
                           onTap: () {

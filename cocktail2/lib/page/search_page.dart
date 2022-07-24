@@ -14,6 +14,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Flutter 107')),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -25,7 +26,23 @@ class _SearchPageState extends State<SearchPage> {
                   .add(SearchEvent(textCtrl.text));
               Navigator.pushNamed(context, '/list');
             },
-          )
+          ),
+          TextButton(
+            child: const Text('Search'),
+            onPressed: () {
+              BlocProvider.of<CocktailBloc>(context)
+                  .add(SearchEvent(textCtrl.text));
+              Navigator.pushNamed(context, '/list');
+            },
+          ),
+          OutlinedButton(
+            child: const Text('Search'),
+            onPressed: () {
+              BlocProvider.of<CocktailBloc>(context)
+                  .add(SearchEvent(textCtrl.text));
+              Navigator.pushNamed(context, '/list');
+            },
+          ),
         ],
       ),
     );

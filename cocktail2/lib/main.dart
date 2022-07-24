@@ -19,6 +19,11 @@ void main(List<String> args) {
   runApp(BlocProvider(
     create: (context) => CocktailBloc(CocktailRepository(provider)),
     child: MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 2, 250, 118)),
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => const SearchPage(),

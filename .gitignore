@@ -23,3 +23,5 @@ doc/api/
 **/generated_plugin_registrant.cc
 **/generated_plugin_registrant.h
 
+cocktail2/windows/flutter/generated_plugin_registrant.cc
+cocktail2/windows/flutter/generated_plugins.cmake

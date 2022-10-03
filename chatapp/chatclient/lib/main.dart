@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:dart_nats/dart_nats.dart' as nats;
+import 'package:flutter/material.dart';
+
 import 'model.dart';
 
 main(List<String> args) {
@@ -28,9 +29,9 @@ class _HomeState extends State<Home> {
   }
 
   void connect() async {
-    await chatClient.tcpConnect('192.168.1.42');
+    await chatClient.connect(Uri.parse('ws://localhost:8080'));
     var sub = chatClient.sub('chatroom.1.pub');
-    sub.stream?.listen((msg) {
+    sub.stream.listen((msg) {
       setState(() {
         messages.add(ChatMessage.fromJson(jsonDecode(msg.string)));
       });

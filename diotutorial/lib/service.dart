@@ -1,6 +1,6 @@
 import 'package:diotutorial/api.dart';
 import 'package:diotutorial/models/post.dart';
-import 'package:fpdart/fpdart.dart';
+
 
 class Service {
   static final _singleton = Service._internal();
@@ -8,12 +8,13 @@ class Service {
 
   Service._internal();
 
-  Future<Either<List<Post>, String>> getPosts() async {
+  // (List<Post>,String?)
+  Future<(List<Post>,String?)> getPosts() async {
     try {
       var response = await Api().dio.get<String>('/posts');
-      return left(postFromJson(response.data ?? ''));
+      return (postFromJson(response.data ?? ''),null);
     } catch (e) {
-      return right(e.toString());
+      return (List<Post>[],e.toString());
     }
   }
 }

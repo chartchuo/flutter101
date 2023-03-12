@@ -1,7 +1,6 @@
 import 'package:diotutorial/models/post.dart';
 import 'package:diotutorial/service.dart';
 import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart' show Either, Left;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Either<List<Post>, String> result = const Left([]);
+  List<Post> posts = [];
+  String? error;
 
   @override
   void initState() {
@@ -20,37 +20,45 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getPosts() async {
-    var r = await Service().getPosts();
+    var (rPosts, rError) = await Service().getPosts();
     setState(() {
-      result = r;
+      posts = rPosts;
+      error = rError;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return result.fold<Widget>((l) {
-      return Scaffold(
-        body: ListView.builder(
-          itemCount: l.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(l[index].title),
-            );
-          },
-        ),
-      );
-    }, (r) {
-      return Scaffold(
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(r),
-            ElevatedButton(
-                onPressed: () => getPosts(), child: const Text('Reload')),
-          ],
-        )),
-      );
-    });
+    if (error != null) {
+      return errorBuild(error!);
+    }
+    return normalBuild(posts);
+  }
+
+  Scaffold errorBuild(String err) {
+    return Scaffold(
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(err),
+          ElevatedButton(
+              onPressed: () => getPosts(), child: const Text('Reload')),
+        ],
+      )),
+    );
+  }
+
+  Scaffold normalBuild(List<Post> posts) {
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: posts.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(posts[index].title),
+          );
+        },
+      ),
+    );
   }
 }
